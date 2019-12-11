@@ -9,7 +9,7 @@ function createToken(user) {
 }
  
 exports.registerUser = (req, res) => {
-    if (!req.body.email || !req.body.password) {
+    if (!req.body.email || !req.body.password ) {
         return res.status(400).json({ 'msg': 'You need to send email and password' });
     }
  
@@ -21,8 +21,9 @@ exports.registerUser = (req, res) => {
         if (user) {
             return res.status(400).json({ 'msg': 'The user already exists' });
         }
- 
+        
         let newUser = User(req.body);
+        newUser.startDate=new Date();
         newUser.save((err, user) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });
