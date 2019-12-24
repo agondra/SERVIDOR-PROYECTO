@@ -13,5 +13,7 @@ routes.post('/login', userController.loginUser);
 routes.get('/special', passport.authenticate('jwt', { session: false }), (req, res) => {
     return res.json({ msg: `Hey ${req.user.email}! I open at the close.` });
 });
+
+routes.get('/contirmacion',userController.confirmation);
  
 module.exports = routes;

@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var config = require('../config/config');
+var nodemailer = require('nodemailer');
  
 function createToken(user) {
     return jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, {
@@ -33,6 +34,34 @@ exports.registerUser = (req, res) => {
     });
 };
  
+exports.confirmation= (req,res)=>{
+    var transporter = nodemailer.createTransport({
+        service:'gmail',
+        auth:{
+            user:'autorregulacionemocional@gmail.com',
+            pass:'Ordenador3S'
+        }
+    }
+    );
+
+    var mensaje="hola como estás";
+    var mailOptions =
+    {
+        from:'autorregulacionemocional@gmail.com',
+        to:'autorregulacionemocional@gmail.com',
+        subject:'asunto es ',
+        text: mensaje
+    }
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(err);
+        }else{
+            console.log("email enviado : "+info.response)
+        }
+    });
+}
+
+
 exports.loginUser = (req, res) => {
     if (!req.body.email || !req.body.password) {
         return res.status(400).send({ 'msg': 'You need to send email and password' });
