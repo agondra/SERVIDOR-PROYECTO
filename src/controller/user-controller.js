@@ -54,9 +54,9 @@ exports.confirmation= (req,res)=>{
     }
     transporter.sendMail(mailOptions, function(error, info){
         if(error){
-            console.log(err);
+            res.send(err);
         }else{
-            console.log("email enviado : "+info.response)
+            res.send(info.response);
         }
     });
 }
