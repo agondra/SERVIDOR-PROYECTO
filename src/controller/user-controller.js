@@ -33,7 +33,9 @@ exports.registerUser = (req, res) => {
 
             User.findOne({ email: req.body.email }, (err, user) => {
             var transporter = nodemailer.createTransport({
-                service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
                 auth: {
                     user: config.gmailUser,
                     pass: config.gmail
@@ -43,7 +45,7 @@ exports.registerUser = (req, res) => {
             var mensaje = "<html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><title>Autorregulacion emocional</title><style type='text/css'> body { margin: 0; padding: 0; min - width: 100 % !important; } .content { width: 100 %; max - width: 600px; }  </style > </head > <body yahoo bgcolor='#f6f8f1'> <table width='100%' bgcolor='#f6f8f1' border='0' cellpadding='0' cellspacing='0'> <tr><td><table class='content' align='center' cellpadding='0' cellspacing='0' border='0'> <tr><td> Bienvenido "+req.body.name+" a autorregulación emocional <br/> Sólo te queda un único paso, pincha en este link para verificar tu correo electrónico<br/><a href='https://servidor-proyecto.herokuapp.com/api/confirmation/"+user._id+"'>Confirmar email</a><br/>En el caso de que este email no tenga nada que ver contigo por favor ignóralo.</td> </tr></table> </td></tr> </table> </body></html > ";
             var mailOptions =
             {
-                from: 'Autorregulacion emocional <autorregulacionemocional@gmail.com>',
+                from: 'Autorregulacion emocional <'+config.gmailUser+'>',
                 to: req.body.email,
                 subject: 'Verifica tu email en autorregulación emocional',
                 html: mensaje
