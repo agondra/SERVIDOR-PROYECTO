@@ -14,6 +14,6 @@ routes.get('/special', passport.authenticate('jwt', { session: false }), (req, r
     return res.json({ msg: `Hey ${req.user.email}! I open at the close.` });
 });
 
-routes.get('/contirmacion',userController.confirmation);
+routes.get('/confirmation/:id',userController.confirmation);
  
 module.exports = routes;

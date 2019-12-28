@@ -34,6 +34,11 @@ var UserSchema = new mongoose.Schema({
         required:true,
         lowercase:true,
         trim:true
+    },
+    confirmationEmail:{
+        type:Boolean,
+        required:true,
+        trim:true,
     }
 });
  
