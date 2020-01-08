@@ -4,5 +4,6 @@ module.exports = {
   // db:'mongodb://localhost/mongodb',
     gmail:'Ordenador3S',
     gmailUser:'autorregulacionemocional@gmail.com',
-    urlBase:'http://localhost:5000'
+    //urlBase:'http://localhost:5000'
+    urlBase:'https://servidor-proyecto.herokuapp.com'
 };

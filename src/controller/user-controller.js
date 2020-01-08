@@ -137,7 +137,7 @@ exports.sendEmailResetPassword=(req, res)=>{
         }
 
         const token= usePasswordHashToMakeToken(user.password, user._id, user.startDate);
-        const url = 'http://localhost:5000/api/password/reset/'+user._id+"/"+token;
+        const url = config.urlBase+'/api/password/reset/'+user._id+"/"+token;
         const emailTemplate=`
         <p>Hey ${user.name || user.email},</p>
         <p>We heard that you lost your Backwoods password. Sorry about that!</p>
