@@ -168,7 +168,7 @@ exports.sendEmailResetPassword=(req, res)=>{
                 res.send(error);
             } else {
                 console.log("todo ok en principio", info.response);
-                res.send(info.response);
+                res.status(200).send(info.response);
             }
         });
 
