@@ -9,6 +9,14 @@ function createToken(user) {
     });
 }
 
+function usePasswordHashToMakeToken(password, _id, createAt){
+
+    const secret = password+ "-" + createAt;
+    const token = jwt.sign({id:_id},secret, {expiresIn:3600});
+    return token;
+
+}
+
 exports.registerUser = (req, res) => {
     if (!req.body.email || !req.body.password) {
         return res.status(400).json({ 'msg': 'You need to send email and password' });
@@ -33,9 +41,7 @@ exports.registerUser = (req, res) => {
 
             User.findOne({ email: req.body.email }, (err, user) => {
             var transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
+                service: 'Gmail',
                 auth: {
                     user: config.gmailUser,
                     pass: config.gmail
@@ -77,8 +83,8 @@ exports.confirmation = (req, res) => {
                     console.log("Confirmación erronea");
                     return res.status(400).send(err);
                 }else{
-                    console.log("confirmación existosa");
-                    return res.status(200).send("<html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><title>Autorregulacion emocional</title><style type='text/css'> body { margin: 0; padding: 0; min - width: 100 % !important; } .content { width: 100 %; max - width: 600px; }  </style > </head > <body yahoo bgcolor='#f6f8f1'> <table width='100%' bgcolor='#f6f8f1' border='0' cellpadding='0' cellspacing='0'> <tr><td><table class='content' align='center' cellpadding='0' cellspacing='0' border='0'> <tr><td> Felicidades "+user.name+"<br/>Ya se ha validado tu email con éxito, ya puedes acceder a la app con tu usuario y contraseña, gracias por confiar en nosotros!</td> </tr></table> </td></tr> </table> </body></html > " );
+                    console.log("confirmación existosa",user);
+                    return res.status(200).send("<html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><title>Autorregulacion emocional</title><style type='text/css'> body { margin: 0; padding: 0; min - width: 100 % !important; } .content { width: 100 %; max - width: 600px; }  </style > </head > <body yahoo bgcolor='#f6f8f1'> <table width='100%' bgcolor='#f6f8f1' border='0' cellpadding='0' cellspacing='0'> <tr><td><table class='content' align='center' cellpadding='0' cellspacing='0' border='0'> <tr><td> Felicidades <br/>Ya se ha validado tu email con éxito, ya puedes acceder a la app con tu usuario y contraseña, gracias por confiar en nosotros!</td> </tr></table> </td></tr> </table> </body></html > " );
                 }
             });
         }
@@ -115,4 +121,107 @@ exports.loginUser = (req, res) => {
             }
         });
     });
+
+    
 };
+
+
+exports.sendEmailResetPassword=(req, res)=>{
+    const email = req.body.email;
+    User.findOne({ email: req.body.email }, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+
+        const token= usePasswordHashToMakeToken(user.password, user._id, user.startDate);
+        const url = 'http://localhost:5000/api/password/reset/'+user._id+"/"+token;
+        const emailTemplate=`
+        <p>Hey ${user.name || user.email},</p>
+        <p>We heard that you lost your Backwoods password. Sorry about that!</p>
+        <p>But don’t worry! You can use the following link to reset your password:</p>
+        <a href=${url}>${url}</a>
+        <p>If you don’t use this link within 1 hour, it will expire.</p>
+        <p>Do something outside today! </p>
+        <p>–Your friends at Backwoods</p>
+        `;
+        var transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: config.gmailUser,
+                pass: config.gmail
+            }
+        }
+        );
+         var mailOptions =
+        {
+            from: 'Autorregulacion emocional <'+config.gmailUser+'>',
+            to: req.body.email,
+            subject: 'Verifica tu email en autorregulación emocional',
+            html: emailTemplate
+        }
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log("ha habido un error", error);
+                res.send(error);
+            } else {
+                console.log("todo ok en principio", info.response);
+                res.send(info.response);
+            }
+        });
+
+    });
+
+}
+
+
+exports.receiveNewPassword=(req,res)=>{
+    let token = req.params.token;
+   // const password=req.body.password;
+    User.findOne({ _id: req.params.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+        let start=user.startDate.toString();
+    
+        let secret = user.password + "-" + start;
+
+        jwt.verify(token, secret, function(err, payload) {
+            if (err) {
+              res.status(401).send("<html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><title>Autorregulacion emocional</title><style type='text/css'> body { margin: 0; padding: 0; min - width: 100 % !important; } .content { width: 100 %; max - width: 600px; }  </style > </head > <body yahoo bgcolor='#f6f8f1'> <table width='100%' bgcolor='#f6f8f1' border='0' cellpadding='0' cellspacing='0'> <tr><td><table class='content' align='center' cellpadding='0' cellspacing='0' border='0'> <tr><td> Bienvenido a autorregulación emocional <br/> Este enlace no es correcto, regístrese en nuestra app.</td> </tr></table> </td></tr> </table> </body></html > ")
+            } else {
+              
+                if (payload.id == user._id){
+                    if (req.body.password){
+                        user.password=req.body.password;
+                        user.save((err, user) => {
+                            if (err) {
+                                return res.status(400).json({ 'msg': err });
+                            }
+                        });
+                    }else{
+                       
+                        return res.status(200).send("<html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><title>Autorregulacion emocional</title><style type='text/css'> body { margin: 0; padding: 0; min - width: 100 % !important; } .content { width: 100 %; max - width: 600px; }  </style > </head > <body yahoo bgcolor='#f6f8f1'> <table width='100%' bgcolor='#f6f8f1' border='0' cellpadding='0' cellspacing='0'> <tr><td><table class='content' align='center' cellpadding='0' cellspacing='0' border='0'> <tr><td> Bienvenido "+user.name+" a autorregulación emocional <br/> Introduce la nueva contraseña:<br/><form action='"+config.urlBase+"/api/password/reset/"+req.params.id+"/"+token+"' method='post'>Nueva contraseña:<br/><input type='text' name='password'/><input type='submit' value='enviar'/></form></td> </tr></table> </td></tr> </table> </body></html >");
+                    }
+                
+                    return res.status(201).send("<html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><title>Autorregulacion emocional</title><style type='text/css'> body { margin: 0; padding: 0; min - width: 100 % !important; } .content { width: 100 %; max - width: 600px; }  </style > </head > <body yahoo bgcolor='#f6f8f1'> <table width='100%' bgcolor='#f6f8f1' border='0' cellpadding='0' cellspacing='0'> <tr><td><table class='content' align='center' cellpadding='0' cellspacing='0' border='0'> <tr><td> Bienvenido "+user.name+" a autorregulación emocional <br/> Tu contraseña ha sido cambiada con éxito</td> </tr></table> </td></tr> </table> </body></html > ");
+                 
+               }else{
+        
+                    return res.status(404).json('Invalid user');
+                }
+        
+            }
+          })
+
+        
+      
+
+    });
+
+}

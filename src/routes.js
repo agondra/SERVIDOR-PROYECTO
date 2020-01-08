@@ -15,5 +15,10 @@ routes.get('/special', passport.authenticate('jwt', { session: false }), (req, r
 });
 
 routes.get('/confirmation/:id',userController.confirmation);
+
+routes.post('/reset',userController.sendEmailResetPassword);
+
+routes.post('/password/reset/:id/:token',userController.receiveNewPassword);
+routes.get('/password/reset/:id/:token',userController.receiveNewPassword);
  
 module.exports = routes;
