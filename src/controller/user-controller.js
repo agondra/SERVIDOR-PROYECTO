@@ -100,7 +100,7 @@ exports.loginUser = (req, res) => {
 
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err) {
-            return res.status(400).send({ 'msg': err });
+            return res.status(400).send({ 'msg': "Usuario no existe" });
         }
 
         if (!user.confirmationEmail){
