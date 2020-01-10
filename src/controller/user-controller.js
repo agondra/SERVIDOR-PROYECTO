@@ -103,13 +103,15 @@ exports.loginUser = (req, res) => {
             return res.status(400).send({ 'msg': "Usuario no existe" });
         }
 
+        
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        } 
+        
         if (!user.confirmationEmail){
             return res.status(400).json({'msg':'The email is not confirmed, please look in the inbox of your email and click on the link we have sent to confirm the email. Thank you'});
         }
 
-        if (!user) {
-            return res.status(400).json({ 'msg': 'The user does not exist' });
-        }
 
         user.comparePassword(req.body.password, (err, isMatch) => {
             if (isMatch && !err) {
