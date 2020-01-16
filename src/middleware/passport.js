@@ -11,11 +11,14 @@ var opts = {
 module.exports = new JwtStrategy(opts, function (jwt_payload, done) {
     User.findById(jwt_payload.id, function (err, user) {
         if (err) {
+            console.log("Error al intentar acceder a recurso protegido");
             return done(err, false);
         }
         if (user) {
+            console.log("se ha accedido a recurso protegido");
             return done(null, user);
         } else {
+            console.log("Error al intentar acceder a recurso protegido");
             return done(null, false);
         }
     });
