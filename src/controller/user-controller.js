@@ -229,7 +229,7 @@ exports.receiveNewPassword=(req,res)=>{
 
 }
 
-/*exports.sendNotificationPush=(req, res) => {
+exports.sendNotificationPush=(req, res) => {
    // return res.json({ msg: `Hey ${req.user.email}! I open at the close.` });
 
     User.findOne({ _id: req.user.id}, (err, user) => {
@@ -240,11 +240,11 @@ exports.receiveNewPassword=(req,res)=>{
             return res.status(400).json({ 'msg': 'The user does not exist' });
         }
         Notification.find({idUser :req.user.id} ,(err, notification) => {
-            res.send(notification);
+            res.status(200).send(notification);
         });
 
     });
-}*/
+}
 
 exports.addPushNotification=(req, res)=>{
 

@@ -22,7 +22,7 @@ routes.post('/password/reset/:id/:token', passport.authenticate('jwt', { session
 routes.get('/password/reset/:id/:token',passport.authenticate('jwt', { session: false }),userController.receiveNewPassword);
 
 
-//routes.get('/notifications/', passport.authenticate('jwt', { session: false }),userController.sendNotificationPush);
+routes.get('/notifications', passport.authenticate('jwt', { session: false }),userController.sendNotificationPush);
 routes.post('/notification/add', passport.authenticate('jwt', { session: false }),userController.addPushNotification);
 //routes.post('/notifications/rm',passport.authenticate('jwt', { session: false }), userController.removePushNotification);
 
