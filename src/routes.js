@@ -18,11 +18,13 @@ routes.get('/confirmation/:id',userController.confirmation);
 
 routes.post('/reset',userController.sendEmailResetPassword);
 
-/*routes.post('/password/reset/:id/:token', passport.authenticate('jwt', { session: false }),userController.receiveNewPassword);
+routes.post('/password/reset/:id/:token', passport.authenticate('jwt', { session: false }),userController.receiveNewPassword);
 routes.get('/password/reset/:id/:token',passport.authenticate('jwt', { session: false }),userController.receiveNewPassword);
-routes.get('/notifications/', passport.authenticate('jwt', { session: false }),userController.sendNotificationPush);
-routes.post('/notification/add', passport.authenticate('jwt', { session: false }),userController.receivePushNotification);
-routes.post('/notifications/rm',passport.authenticate('jwt', { session: false }), userController.removePushNotification);*/
+
+
+//routes.get('/notifications/', passport.authenticate('jwt', { session: false }),userController.sendNotificationPush);
+routes.post('/notification/add', passport.authenticate('jwt', { session: false }),userController.addPushNotification);
+//routes.post('/notifications/rm',passport.authenticate('jwt', { session: false }), userController.removePushNotification);
 
  
 module.exports = routes;

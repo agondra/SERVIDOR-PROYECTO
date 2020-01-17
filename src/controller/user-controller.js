@@ -2,7 +2,7 @@ var User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 var nodemailer = require('nodemailer');
-
+var Notification= require('../models/notification');
 function createToken(user) {
     return jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, {
         expiresIn: 86400 // 86400 expires in 24 hours
@@ -94,6 +94,7 @@ exports.confirmation = (req, res) => {
 
 
 exports.loginUser = (req, res) => {
+   
     if (!req.body.email || !req.body.password) {
         return res.status(400).send({ 'msg': 'You need to send email and password' });
     }
@@ -228,8 +229,46 @@ exports.receiveNewPassword=(req,res)=>{
 
 }
 
-/*exports.sendNotificationPush=(req,res)=>{
+/*exports.sendNotificationPush=(req, res) => {
+   // return res.json({ msg: `Hey ${req.user.email}! I open at the close.` });
 
+    User.findOne({ _id: req.user.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+        Notification.find({idUser :req.user.id} ,(err, notification) => {
+            res.send(notification);
+        });
 
-
+    });
 }*/
+
+exports.addPushNotification=(req, res)=>{
+
+    User.findOne({ _id: req.user.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+        let newNotification = Notification(req.body);
+        newNotification.startDate = new Date();
+        newNotification.idUser = req.user.id;
+        newNotification.open=false;
+        newNotification.save((err, user) => {
+            if (err) {
+                return res.status(400).json({ 'msg': err });
+            }else{
+                console.log("the user "+req.user.id+" tiene una nueva notificación");
+                res.status(200).send("notificación añadida");
+            }
+        });
+
+    });
+
+
+}
