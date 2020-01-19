@@ -24,7 +24,7 @@ routes.get('/password/reset/:id/:token',passport.authenticate('jwt', { session: 
 
 routes.get('/notifications', passport.authenticate('jwt', { session: false }),userController.getNotificationPush);
 routes.post('/notification/add', passport.authenticate('jwt', { session: false }),userController.addPushNotification);
-routes.post('/notification/rm/:id',passport.authenticate('jwt', { session: false }), userController.removePushNotification);
-routes.post('/notification/open/:id',passport.authenticate('jwt', { session: false }), userController.openPushNotification);
+routes.get('/notification/rm/:id',passport.authenticate('jwt', { session: false }), userController.removePushNotification);
+routes.get('/notification/open/:id',passport.authenticate('jwt', { session: false }), userController.openPushNotification);
  
 module.exports = routes;
