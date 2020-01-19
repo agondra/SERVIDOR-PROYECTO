@@ -229,7 +229,7 @@ exports.receiveNewPassword=(req,res)=>{
 
 }
 
-exports.sendNotificationPush=(req, res) => {
+exports.getNotificationPush=(req, res) => {
    // return res.json({ msg: `Hey ${req.user.email}! I open at the close.` });
 
     User.findOne({ _id: req.user.id}, (err, user) => {
@@ -239,8 +239,11 @@ exports.sendNotificationPush=(req, res) => {
         if (!user) {
             return res.status(400).json({ 'msg': 'The user does not exist' });
         }
-        Notification.find({idUser :req.user.id} ,(err, notification) => {
-            res.status(200).send(notification);
+    Notification.find({idUser :req.user.id} ,(err, notifications) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+            res.status(200).send(notifications);
         });
 
     });
@@ -272,3 +275,22 @@ exports.addPushNotification=(req, res)=>{
 
 
 }
+
+
+exports.removePushNotification=(req, res)=>{
+
+        Notification.remove({ _id: req.params.id}, (err, notification) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!notification) {
+            return res.status(400).json({ 'msg': 'The notification does not exist' });
+        }
+
+        return res.status(200).send({"msg":'Eliminado la notificación '+req.params.id+' correctamente'});
+
+
+    });
+
+
+};
