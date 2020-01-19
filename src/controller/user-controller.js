@@ -294,3 +294,26 @@ exports.removePushNotification=(req, res)=>{
 
 
 };
+
+
+exports.openPushNotification=(req,res)=>{
+
+    Notification.findOne({ _id: req.params.id}, (err, notification) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!notification) {
+            return res.status(400).json({ 'msg': 'The notification does not exist' });
+        }
+
+        Notification.update(
+            { _id: req.params.id},
+            {$set: { "open" : true}},(err, notification)=>{
+                return res.status(200).send({"msg":'Notificación '+req.params.id+' abierta'});
+            });
+        
+
+
+    });
+
+}
