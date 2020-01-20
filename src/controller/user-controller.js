@@ -262,12 +262,12 @@ exports.addPushNotification=(req, res)=>{
         newNotification.startDate = new Date();
         newNotification.idUser = req.user.id;
         newNotification.open=false;
-        newNotification.save((err, user) => {
+        newNotification.save((err, notitication) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });
             }else{
                 console.log("the user "+req.user.id+" tiene una nueva notificación");
-                res.status(200).send("notificación añadida");
+                res.status(200).send(notification._id);
             }
         });
 
