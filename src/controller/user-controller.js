@@ -262,7 +262,7 @@ exports.addPushNotification=(req, res)=>{
         newNotification.startDate = new Date();
         newNotification.idUser = req.user.id;
         newNotification.open=false;
-        newNotification.save((err, notitication) => {
+        newNotification.save((err, notification) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });
             }else{
