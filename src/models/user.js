@@ -39,7 +39,18 @@ var UserSchema = new mongoose.Schema({
         type:Boolean,
         required:true,
         trim:true,
+    },
+    deviceMyBand:{
+        type:String,
+        lowercase:true,
+        trim:true
+    },
+    secretKey:{
+        type:String,
+        lowercase:true,
+        trim:true
     }
+
 });
  
 UserSchema.pre('save',  function(next) {

@@ -24,16 +24,20 @@ exports.registerUser = (req, res) => {
 
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err) {
+            console.log("error normal",err);
             return res.status(400).json({ 'msg': err });
         }
 
         if (user) {
+            console.log("ya existe",err);
             return res.status(400).json({ 'msg': 'The user already exists' });
         }
 
         let newUser = User(req.body);
         newUser.startDate = new Date();
         newUser.confirmationEmail = false;
+        newUser.deviceMyBand="00";
+        newUser.secretKey="00";
         newUser.save((err, user) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });
@@ -109,16 +113,18 @@ exports.loginUser = (req, res) => {
             return res.status(400).json({ 'msg': 'The user does not exist' });
         } 
         
-        if (!user.confirmationEmail){
-            return res.status(400).json({'msg':'The email is not confirmed, please look in the inbox of your email and click on the link we have sent to confirm the email. Thank you'});
-        }
+       
 
 
         user.comparePassword(req.body.password, (err, isMatch) => {
             if (isMatch && !err) {
+                if (!user.confirmationEmail){
+                    return res.status(400).json({'msg':'The email is not confirmed, please look in the inbox of your email and click on the link we have sent to confirm the email. Thank you'});
+                }else{
                 return res.status(200).json({
                     token: createToken(user)
                 });
+            }
             } else {
                 return res.status(400).json({ msg: 'The email and password don\'t match.' });
             }
@@ -313,6 +319,33 @@ exports.openPushNotification=(req,res)=>{
             });
         
 
+
+    });
+
+}
+
+exports.getDataMyBand=(req, res)=>{
+    User.findOne({ _id: req.user.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+
+        user.secretKey=req.body.secretKey;
+        user.deviceMyBand=req.body.deviceMyBand;
+        user.save((err, user) => {
+            if (err) {
+                return res.status(400).json({ 'msg': err });
+            }else{
+                console.log("datos de la my band introducidos con éxito");
+                return res.status(200).json({'msg':"Se han introducido los datos de la myband con éxito"});
+            }
+
+        });
+
+       
 
     });
 

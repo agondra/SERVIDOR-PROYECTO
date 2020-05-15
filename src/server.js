@@ -10,7 +10,9 @@ var app = express();
 app.use(cors());
  
 // get our request parameters
+//cuando se mande un formulario podré leer los datos los datos 
 app.use(bodyParser.urlencoded({ extended: false }));
+//podré interpretar los json que llegan
 app.use(bodyParser.json());
  
 // Use the passport package in our application
