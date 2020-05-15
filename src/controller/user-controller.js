@@ -324,7 +324,7 @@ exports.openPushNotification=(req,res)=>{
 
 }
 
-exports.getDataMyBand=(req, res)=>{
+exports.setDataMyBand=(req, res)=>{
     User.findOne({ _id: req.user.id}, (err, user) => {
         if (err) {
             return res.status(400).send({ 'msg': err });
@@ -345,6 +345,28 @@ exports.getDataMyBand=(req, res)=>{
 
         });
 
+       
+
+    });
+
+}
+
+exports.getDataMyBand=(req, res)=>{
+    User.findOne({ _id: req.user.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+
+        let datos={
+            "deviceMyBand":user.deviceMyBand,
+            "secretKey":user.secretKey
+        }
+
+       
+            res.status(200).send(datos);
        
 
     });

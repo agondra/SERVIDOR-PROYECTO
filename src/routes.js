@@ -28,5 +28,6 @@ routes.get('/notification/rm/:id',passport.authenticate('jwt', { session: false 
 routes.get('/notification/open/:id',passport.authenticate('jwt', { session: false }), userController.openPushNotification);
 
 
-routes.post('/myband',passport.authenticate('jwt', { session: false }),userController.getDataMyBand);
+routes.post('/myband',passport.authenticate('jwt', { session: false }),userController.setDataMyBand);
+routes.get('/myband',passport.authenticate('jwt', { session: false }),userController.getDataMyBand);
 module.exports = routes;
