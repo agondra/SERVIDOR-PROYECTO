@@ -42,12 +42,10 @@ var UserSchema = new mongoose.Schema({
     },
     deviceMyBand:{
         type:String,
-        lowercase:true,
         trim:true
     },
     secretKey:{
         type:String,
-        lowercase:true,
         trim:true
     }
 
