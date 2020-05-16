@@ -37,7 +37,6 @@ exports.registerUser = (req, res) => {
         newUser.startDate = new Date();
         newUser.confirmationEmail = false;
         newUser.deviceMyBand="00";
-        newUser.secretKey="00";
         newUser.save((err, user) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });

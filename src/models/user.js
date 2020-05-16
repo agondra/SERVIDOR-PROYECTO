@@ -45,7 +45,7 @@ var UserSchema = new mongoose.Schema({
         trim:true
     },
     secretKey:{
-        type:String,
+        type:Uint8Array,
         trim:true
     }
 
