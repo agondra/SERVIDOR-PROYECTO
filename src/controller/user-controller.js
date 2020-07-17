@@ -3,6 +3,7 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 var nodemailer = require('nodemailer');
 var Notification= require('../models/notification');
+var Medida = require('../models/medidas');
 function createToken(user) {
     return jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, {
         expiresIn: 86400 // 86400 expires in 24 hours
@@ -42,6 +43,7 @@ exports.registerUser = (req, res) => {
         newUser.sexo="00";
         newUser.altura="00";
         newUser.peso="00";
+        newUser.tcmedio=0;
         newUser.save((err, user) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });
@@ -278,6 +280,33 @@ exports.addPushNotification=(req, res)=>{
             }else{
                 console.log("the user "+req.user.id+" tiene una nueva notificación");
                 res.status(200).send(notification._id);
+            }
+        });
+
+    });
+
+
+}
+
+exports.setMedida=(req, res)=>{
+
+    User.findOne({ _id: req.user.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+        let newMedida = Medida(req.body);
+        newMedida.startDate = new Date();
+        newMedida.idUser = req.user.id;
+       
+        newMedida.save((err, medida) => {
+            if (err) {
+                return res.status(400).json({ 'msg': err });
+            }else{
+                console.log("Medida añadida con éxito");
+                res.status(200).send(medida._id);
             }
         });
 

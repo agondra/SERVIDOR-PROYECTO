@@ -54,11 +54,12 @@ var UserSchema = new mongoose.Schema({
     },
     sexo:{
         type:String,
-        trim:true
+        trim:true,
+        lowercase:true
     },
     altura:{
         type:String,
-        trim:true
+        trim:true,
     },
     peso:{
         type:String,
@@ -66,6 +67,10 @@ var UserSchema = new mongoose.Schema({
     },
     deporte:{
         type:String,
+        trim:true
+    },
+    tcmedio:{
+        type:Number,
         trim:true
     }
     

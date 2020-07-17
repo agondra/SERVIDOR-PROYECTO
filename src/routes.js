@@ -33,3 +33,5 @@ routes.get('/myband',passport.authenticate('jwt', { session: false }),userContro
 module.exports = routes;
 
 routes.post('/formularioInicial',passport.authenticate('jwt', { session: false }),userController.setDataUser);
+
+routes.post('/medida',passport.authenticate('jwt', { session: false }),userController.setMedida);
