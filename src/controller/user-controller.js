@@ -38,6 +38,10 @@ exports.registerUser = (req, res) => {
         newUser.confirmationEmail = false;
         newUser.deviceMyBand="00";
         newUser.secretKey="00";
+        newUser.firstconexion=true;
+        newUser.sexo="00";
+        newUser.altura="00";
+        newUser.peso="00";
         newUser.save((err, user) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });

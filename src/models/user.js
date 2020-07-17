@@ -47,7 +47,24 @@ var UserSchema = new mongoose.Schema({
     secretKey:{
         type:String,
         trim:true
+    },
+    firstconexion:{
+        type:Boolean,
+        trim:true
+    },
+    sexo:{
+        type:String,
+        trim:true
+    },
+    altura:{
+        type:String,
+        trim:true
+    },
+    peso:{
+        type:String,
+        trim:true
     }
+    
 
 });
  
