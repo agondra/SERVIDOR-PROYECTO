@@ -355,6 +355,35 @@ exports.setDataMyBand=(req, res)=>{
 
 }
 
+exports.setDataUser=(req, res)=>{
+    User.findOne({ _id: req.user.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+
+        user.firstconexion=false;
+        user.sexo=req.body.sexo;
+        user.altura=req.body.altura;
+        user.peso=req.body.peso;
+        user.save((err, user) => {
+            if (err) {
+                return res.status(400).json({ 'msg': err });
+            }else{
+                console.log("Se han añadido con éxito los datos de la usuario");
+                return res.status(200).json({'msg':"Se han introducido los datos del usuario con éxito"});
+            }
+
+        });
+
+       
+
+    });
+
+}
+
 exports.getDataMyBand=(req, res)=>{
     User.findOne({ _id: req.user.id}, (err, user) => {
         if (err) {
