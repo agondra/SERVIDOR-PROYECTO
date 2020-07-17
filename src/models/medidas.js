@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var MedidasSchema = new mongoose.Schema({
+var MedidaSchema = new mongoose.Schema({
 
     idUser:{
         type:String,
@@ -49,4 +49,4 @@ var MedidasSchema = new mongoose.Schema({
 
 
  
-module.exports = mongoose.model('Medidas', MedidasSchema);
+module.exports = mongoose.model('Medida', MedidaSchema);
