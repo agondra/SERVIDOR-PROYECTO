@@ -63,6 +63,10 @@ var UserSchema = new mongoose.Schema({
     peso:{
         type:String,
         trim:true
+    },
+    deporte:{
+        type:String,
+        trim:true
     }
     
 

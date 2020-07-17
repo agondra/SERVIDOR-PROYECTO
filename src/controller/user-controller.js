@@ -368,6 +368,7 @@ exports.setDataUser=(req, res)=>{
         user.sexo=req.body.sexo;
         user.altura=req.body.altura;
         user.peso=req.body.peso;
+        user.deporte=req.body.deporte;
         user.save((err, user) => {
             if (err) {
                 return res.status(400).json({ 'msg': err });
