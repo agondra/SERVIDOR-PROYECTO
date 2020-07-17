@@ -30,8 +30,12 @@ routes.get('/notification/open/:id',passport.authenticate('jwt', { session: fals
 
 routes.post('/myband',passport.authenticate('jwt', { session: false }),userController.setDataMyBand);
 routes.get('/myband',passport.authenticate('jwt', { session: false }),userController.getDataMyBand);
-module.exports = routes;
+
 
 routes.post('/formularioInicial',passport.authenticate('jwt', { session: false }),userController.setDataUser);
 
 routes.post('/medida',passport.authenticate('jwt', { session: false }),userController.setMedida);
+
+routes.get('/firstConexion',passport.authenticate('jwt', { session: false }),userController.getFirstConexion);
+
+module.exports = routes;
