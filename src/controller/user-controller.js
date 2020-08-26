@@ -455,5 +455,26 @@ exports.getFirstConexion=(req, res)=>{
        
 
     });
+    
 
 }
+
+exports.getMedidas=(req, res) => {
+    // return res.json({ msg: `Hey ${req.user.email}! I open at the close.` });
+ 
+     User.findOne({ _id: req.user.id}, (err, user) => {
+         if (err) {
+             return res.status(400).send({ 'msg': err });
+         }
+         if (!user) {
+             return res.status(400).json({ 'msg': 'The user does not exist' });
+         }
+     Medida.find({idUser :req.user.id} ,(err, medidas) => {
+         if (err) {
+             return res.status(400).send({ 'msg': err });
+         }
+             res.status(200).send(medidas);
+         });
+ 
+     });
+ }
