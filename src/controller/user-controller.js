@@ -490,7 +490,7 @@ exports.getMedidas=(req, res) => {
         }
 
         let datos={
-            "firstConexion":user.tcmedio
+            "tcMedio":user.tcmedio
         }
 
        
