@@ -38,6 +38,8 @@ routes.post('/medida',passport.authenticate('jwt', { session: false }),userContr
 
 routes.get('/firstConexion',passport.authenticate('jwt', { session: false }),userController.getFirstConexion);
 
+routes.get('/TCMedio',passport.authenticate('jwt', { session: false }),userController.getTC);
+
 routes.get('/medidas',passport.authenticate('jwt', { session: false }),userController.getMedidas);
 
 module.exports = routes;

@@ -478,3 +478,26 @@ exports.getMedidas=(req, res) => {
  
      });
  }
+
+
+ exports.getTC=(req, res)=>{
+    User.findOne({ _id: req.user.id}, (err, user) => {
+        if (err) {
+            return res.status(400).send({ 'msg': err });
+        }
+        if (!user) {
+            return res.status(400).json({ 'msg': 'The user does not exist' });
+        }
+
+        let datos={
+            "firstConexion":user.tcmedio
+        }
+
+       
+            res.status(200).send(datos);
+       
+
+    });
+    
+
+}
